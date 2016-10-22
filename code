@@ -1,0 +1,140 @@
+> getwd()
+[1] "/Users/ashwindesai"
+
+> setwd("/Users/ashwindesai/Documents")
+
+> getwd()
+[1] "/Users/ashwindesai/Documents"
+
+> df <- read.csv("refine_original.csv",)
+
+> df[df == "Phillips"] = "philips"
+> df[df == "phillips"] = "philips"
+> df[df == "phllips"] = "philips"
+> df[df == "phillipS"] = "philips"
+> df[df == "phillps"] = "philips"
+> df[df == "phlips"] = "philips"
+> df[df == "Akzo"] = "akzo"
+> df[df == "AKZO"] = "akzo"
+> df[df == "akz0"] = "akzo"
+> df[df == "ak zo"] = "akzo"
+> df[df == "filips"] = "philips"
+> df[df == "fillips"] = "philips"
+> df[df == "Van Houten"] = "van houten"
+> df[df == "Van Houten"] = "van houten"
+> df[df == "van Houten"] = "van houten"
+> df[df == "unilver"] = "unilever"
+> df[df == "Unilver"] = "unilever"
+> df[df == "Unilever"] = "unilever"
+
+> install.packages("tidyr")
+also installing the dependencies ‘assertthat’, ‘R6’, ‘DBI’, ‘BH’, ‘tibble’, ‘dplyr’, ‘stringi’, ‘lazyeval’, ‘magrittr’, ‘Rcpp’
+
+trying URL 'https://cran.rstudio.com/bin/macosx/mavericks/contrib/3.3/assertthat_0.1.tgz'
+Content type 'unknown' length 43355 bytes (42 KB)
+==================================================
+downloaded 42 KB
+
+trying URL 'https://cran.rstudio.com/bin/macosx/mavericks/contrib/3.3/R6_2.2.0.tgz'
+Content type 'unknown' length 183002 bytes (178 KB)
+==================================================
+downloaded 178 KB
+
+trying URL 'https://cran.rstudio.com/bin/macosx/mavericks/contrib/3.3/DBI_0.5-1.tgz'
+Content type 'unknown' length 353669 bytes (345 KB)
+==================================================
+downloaded 345 KB
+
+trying URL 'https://cran.rstudio.com/bin/macosx/mavericks/contrib/3.3/BH_1.60.0-2.tgz'
+Content type 'unknown' length 9263219 bytes (8.8 MB)
+==================================================
+downloaded 8.8 MB
+
+trying URL 'https://cran.rstudio.com/bin/macosx/mavericks/contrib/3.3/tibble_1.2.tgz'
+Content type 'unknown' length 294193 bytes (287 KB)
+==================================================
+downloaded 287 KB
+
+trying URL 'https://cran.rstudio.com/bin/macosx/mavericks/contrib/3.3/dplyr_0.5.0.tgz'
+Content type 'unknown' length 4841443 bytes (4.6 MB)
+==================================================
+downloaded 4.6 MB
+
+trying URL 'https://cran.rstudio.com/bin/macosx/mavericks/contrib/3.3/stringi_1.1.2.tgz'
+Content type 'unknown' length 12656325 bytes (12.1 MB)
+==================================================
+downloaded 12.1 MB
+
+trying URL 'https://cran.rstudio.com/bin/macosx/mavericks/contrib/3.3/lazyeval_0.2.0.tgz'
+Content type 'unknown' length 122487 bytes (119 KB)
+==================================================
+downloaded 119 KB
+
+trying URL 'https://cran.rstudio.com/bin/macosx/mavericks/contrib/3.3/magrittr_1.5.tgz'
+Content type 'unknown' length 145876 bytes (142 KB)
+==================================================
+downloaded 142 KB
+
+trying URL 'https://cran.rstudio.com/bin/macosx/mavericks/contrib/3.3/Rcpp_0.12.7.tgz'
+Content type 'unknown' length 2988974 bytes (2.9 MB)
+==================================================
+downloaded 2.9 MB
+
+trying URL 'https://cran.rstudio.com/bin/macosx/mavericks/contrib/3.3/tidyr_0.6.0.tgz'
+Content type 'unknown' length 549152 bytes (536 KB)
+==================================================
+downloaded 536 KB
+
+
+The downloaded binary packages are in
+	/var/folders/58/q47wbfb5361ck5b44bktn9d00000gn/T//Rtmp0lRLo7/downloaded_packages
+
+> library("tidyr")
+
+> df <- separate(df, Product.code...number, into = c("product_code", "product_number"), sep = "-")
+
+> x <- df[,2]
+> length <- length(df)
+> df[length+1] <- x
+> names(df[length+1]) <- "product_category"
+
+> names(df)[names(df) == "V8"] <- "product_category"
+> df <- df[,c(1,2,8,3,4,5,6,7)]
+
+> df$product_category[df$product_category == "p"] <- "Smartphone"
+> df$product_category[df$product_category == "v"] <- "TV"
+> df$product_category[df$product_category == "x"] <- "Laptop"
+> df$product_category[df$product_category == "q"] <- "Tablet"
+
+> df <- within(df, "full_address" <- paste(address,city,country, sep=","))
+
+> install.packages("dplyr")
+trying URL 'https://cran.rstudio.com/bin/macosx/mavericks/contrib/3.3/dplyr_0.5.0.tgz'
+Content type 'unknown' length 4841443 bytes (4.6 MB)
+==================================================
+downloaded 4.6 MB
+
+
+The downloaded binary packages are in
+	/var/folders/58/q47wbfb5361ck5b44bktn9d00000gn/T//Rtmp0lRLo7/downloaded_packages
+> library(dplyr)
+
+Attaching package: ‘dplyr’
+
+The following objects are masked from ‘package:stats’:
+
+    filter, lag
+
+The following objects are masked from ‘package:base’:
+
+    intersect, setdiff, setequal, union
+
+> for(level in unique(df$company)){
++ df[paste("company",level,sep = "_")] <- ifelse(df$company == level, 1, 0)
++ }
+
+> for(level in unique(df$product_category)){
++ df[paste("product",level,sep = "_")] <- ifelse(df$product_category == level,1,0)
++ }
+
+> write.csv(df, file = "refine_clean.csv")
